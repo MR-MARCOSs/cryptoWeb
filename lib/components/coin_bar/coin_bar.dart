@@ -1,53 +1,55 @@
-// coin_bar.dart
 import 'package:flutter/material.dart';
 import 'coin_bar_view_model.dart';
+
 
 class CoinBar extends StatelessWidget {
   final CoinBarViewModel viewModel;
 
   const CoinBar({Key? key, required this.viewModel}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Add padding for better spacing
       decoration: BoxDecoration(
-        border: viewModel.hasBorder
-            ? Border.all(color: Colors.grey, width: 1.0)
+        color: viewModel.fillColor ?? Colors.grey[200],
+        border: viewModel.borderColor != null && viewModel.borderWidth != null
+            ? Border.all(color: viewModel.borderColor!, width: viewModel.borderWidth!)
             : null,
-        borderRadius: BorderRadius.circular(8.0), // Optional: Add rounded corners
+        borderRadius: BorderRadius.circular(20), // Rounded corners for the pill shape
       ),
-      padding: const EdgeInsets.all(16.0), // Adjust padding as needed
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Coin Image
-          Image.network(
-            viewModel.coinImage,
-            height: 24, // Adjust size as needed
-            width: 24,
+          SizedBox(
+            width: 40, // Set a fixed size for the coin image
+            height: 40,
+            child: ClipOval(child: viewModel.coinImage), // Clip the coin image to a circle
           ),
-          // Coin Value (Bold)
-          Expanded( // Use Expanded to center the text
-            child: Center(
-              child: Text(
-                viewModel.coinValue,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+
+          Expanded( // Expand to occupy remaining space for the value
+            child: Text(
+              viewModel.value,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16, // Adjust font size as needed
               ),
             ),
           ),
 
+          Icon(viewModel.icon1, color: Colors.grey),
+          const SizedBox(width: 8), // Add spacing between icons
+          Icon(viewModel.icon2, color: Colors.green),
 
-
-          // Icons
-          Row(
-            children: [
-              Icon(viewModel.icon1),
-              const SizedBox(width: 8.0), // Add some spacing between icons
-              Icon(viewModel.icon2),
-            ],
-          ),
         ],
       ),
     );
   }
 }
+
+
+// Example usage:
+
+// ... in another widget's build method ...
+
