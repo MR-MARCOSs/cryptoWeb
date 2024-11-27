@@ -56,6 +56,7 @@ flutter:
     - assets/Dogecoin_Logo.png
     - assets/bitcoin_icon.png
     - assets/eth_icon.png
+    - assets/main_icon.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
