@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'components/coin_bar/coin_bar.dart';
 import 'components/coin_bar/coin_bar_view_model.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -19,22 +18,61 @@ class MyApp extends StatelessWidget {
 class CoinBarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Criando o CoinBarViewModel com valores fictícios
-    final viewModel = CoinBarViewModel(
-      coinImage: Image.asset('assets/bitcoin.png'), // Exemplo de imagem de moeda
-      value: '\$15,000', // Valor da moeda
-      icon1: Icons.arrow_upward, // Ícone de aumento
-      icon2: Icons.arrow_downward, // Ícone de queda
-      fillColor: Colors.blueAccent, // Cor de fundo personalizada
-      borderColor: Colors.white, // Cor da borda
-      borderWidth: 2.0, // Largura da borda
-    );
+    final coinBars = [
+      CoinBarViewModel(
+        coinImage: Image.asset('assets/Dogecoin_Logo.png'),
+        value: '\$15,000',
+        icon1: Icons.favorite_sharp,
+        icon2: Icons.arrow_upward,
+        icon1Color: Color(0xFF7F24CE), // Coração roxo
+        icon2Color: Colors.green, // Seta vermelha
+        fillColor: Color(0xFFE9E9E9),
+        borderColor: Color(0xFF7F24CE),
+        borderWidth: 2.0,
+      ),
+      CoinBarViewModel(
+        coinImage: Image.asset('assets/bitcoin_icon.png'),
+        value: '\$25,000',
+        icon1: Icons.favorite_sharp,
+        icon2: Icons.arrow_downward,
+        icon1Color: Color(0xFF878787), // Coração cinza
+        icon2Color: Colors.red,
+        fillColor: Color(0xFFE9E9E9),
+        borderColor: Color(0xFF7F24CE),
+        borderWidth: 2.0,
+      ),
+      CoinBarViewModel(
+        coinImage: Image.asset('assets/eth_icon.png'),
+        value: '\$10,000',
+        icon1: Icons.favorite_sharp,
+        icon2: Icons.arrow_downward,
+        icon1Color: Color(0xFF878787), // Coração cinza
+        icon2Color: Colors.red,
+        fillColor: Color(0xFFE9E9E9),
+        borderColor: Color(0xFF7F24CE),
+        borderWidth: 2.0,
+      ),
+    ];
 
     return Scaffold(
-      appBar: AppBar(title: Text('Coin Bar Example')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: CoinBar(viewModel: viewModel),
+      appBar: AppBar(title: Text('Coin Bar List')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: coinBars.map((viewModel) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Container(
+                  margin: const EdgeInsets.only(
+                      left: 30), // Espaço extra à esquerda
+                  child: CoinBar(viewModel: viewModel),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }
