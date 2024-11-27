@@ -1,9 +1,9 @@
-/*import 'package:flutter/material.dart';
+/*
+import 'package:flutter/material.dart';
 import 'components/button/button.dart';
 import 'components/button/button_view_model.dart';
 import 'components/input_field/input_field.dart';
 import 'components/input_field/input_field_view_model.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -28,14 +28,14 @@ class CadastrarTela extends StatefulWidget {
   const CadastrarTela({super.key});
 
   @override
-
   State<CadastrarTela> createState() => _CadastrarTelaState();
 }
 
 class _CadastrarTelaState extends State<CadastrarTela> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
 
   bool _aceitoTermos = false;
 
@@ -48,19 +48,21 @@ class _CadastrarTelaState extends State<CadastrarTela> {
           alignment: Alignment.topCenter,
           children: [
             Card(
-              margin: const EdgeInsets.only(top: 28, left: 20, right: 20),
+              margin: const EdgeInsets.only(top: 25.3, left: 20, right: 20),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const SizedBox(height: 5), // Espaçamento para o título externo
+                    const SizedBox(
+                        height: 3), // Espaçamento para o título externo
                     const CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.grey,
                     ),
                     const SizedBox(height: 20),
-                    InputField( // Substitua pelo seu componente InputField
+                    InputField(
+                      // Substitua pelo seu componente InputField
                       viewModel: InputFieldViewModel(
                         controller: _emailController,
                         hintText: 'Email ou telefone',
@@ -68,7 +70,8 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    InputField( // Substitua pelo seu componente InputField
+                    InputField(
+                      // Substitua pelo seu componente InputField
                       viewModel: InputFieldViewModel(
                         controller: _senhaController,
                         hintText: 'Senha',
@@ -77,7 +80,8 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    InputField( // Substitua pelo seu componente InputField
+                    InputField(
+                      // Substitua pelo seu componente InputField
                       viewModel: InputFieldViewModel(
                         controller: _confirmarSenhaController,
                         hintText: 'Confirmar senha',
@@ -107,8 +111,6 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                     const SizedBox(height: 5),
@@ -132,19 +134,16 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                     ),
                     const SizedBox(height: 20),
 
-
-                    Button(  // Substitua pelo seu componente Button
+                    Button(
+                      // Substitua pelo seu componente Button
                       viewModel: ButtonViewModel(
                         buttonText: 'Continuar',
                         fillColor: Colors.deepPurple,
                         onPressed: () {
-                           // Ação ao clicar em "Continuar"
+                          // Ação ao clicar em "Continuar"
                         },
                       ),
                     ),
-
-
-
                   ],
                 ),
               ),
@@ -165,4 +164,5 @@ class _CadastrarTelaState extends State<CadastrarTela> {
       ),
     );
   }
-}*/
+}
+*/

@@ -1,77 +1,164 @@
 import 'package:flutter/material.dart';
-import 'components/coin_bar/coin_bar.dart';
-import 'components/coin_bar/coin_bar_view_model.dart';
+import 'components/button/button.dart';
+import 'components/button/button_view_model.dart';
+import 'components/input_field/input_field.dart';
+import 'components/input_field/input_field_view_model.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CoinBarScreen(),
+      title: 'Cadastrar Tela',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+      home: const CadastrarTela(),
     );
   }
 }
 
-class CoinBarScreen extends StatelessWidget {
+class CadastrarTela extends StatefulWidget {
+  const CadastrarTela({super.key});
+
+  @override
+  State<CadastrarTela> createState() => _CadastrarTelaState();
+}
+
+class _CadastrarTelaState extends State<CadastrarTela> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
+
+  bool _aceitoTermos = false;
+
   @override
   Widget build(BuildContext context) {
-    final coinBars = [
-      CoinBarViewModel(
-        coinImage: Image.asset('assets/Dogecoin_Logo.png'),
-        value: '\$15,000',
-        icon1: Icons.favorite_sharp,
-        icon2: Icons.arrow_upward,
-        icon1Color: Color(0xFF7F24CE), // Coração roxo
-        icon2Color: Colors.green, // Seta vermelha
-        fillColor: Color(0xFFE9E9E9),
-        borderColor: Color(0xFF7F24CE),
-        borderWidth: 2.0,
-      ),
-      CoinBarViewModel(
-        coinImage: Image.asset('assets/bitcoin_icon.png'),
-        value: '\$25,000',
-        icon1: Icons.favorite_sharp,
-        icon2: Icons.arrow_downward,
-        icon1Color: Color(0xFF878787), // Coração cinza
-        icon2Color: Colors.red,
-        fillColor: Color(0xFFE9E9E9),
-        borderColor: Color(0xFF7F24CE),
-        borderWidth: 2.0,
-      ),
-      CoinBarViewModel(
-        coinImage: Image.asset('assets/eth_icon.png'),
-        value: '\$10,000',
-        icon1: Icons.favorite_sharp,
-        icon2: Icons.arrow_downward,
-        icon1Color: Color(0xFF878787), // Coração cinza
-        icon2Color: Colors.red,
-        fillColor: Color(0xFFE9E9E9),
-        borderColor: Color(0xFF7F24CE),
-        borderWidth: 2.0,
-      ),
-    ];
-
     return Scaffold(
-      appBar: AppBar(title: Text('Coin Bar List')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: coinBars.map((viewModel) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Container(
-                  margin: const EdgeInsets.only(
-                      left: 30), // Espaço extra à esquerda
-                  child: CoinBar(viewModel: viewModel),
+      backgroundColor: Colors.deepPurple,
+      body: Center(
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Card(
+              margin: const EdgeInsets.only(top: 25.3, left: 20, right: 20),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(
+                        height: 3), // Espaçamento para o título externo
+                    const CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.grey,
+                    ),
+                    const SizedBox(height: 20),
+                    InputField(
+                      // Substitua pelo seu componente InputField
+                      viewModel: InputFieldViewModel(
+                        controller: _emailController,
+                        hintText: 'Email ou telefone',
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                      // Substitua pelo seu componente InputField
+                      viewModel: InputFieldViewModel(
+                        controller: _senhaController,
+                        hintText: 'Senha',
+                        obscureText: true,
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                      // Substitua pelo seu componente InputField
+                      viewModel: InputFieldViewModel(
+                        controller: _confirmarSenhaController,
+                        hintText: 'Confirmar senha',
+                        obscureText: true,
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _aceitoTermos,
+                          onChanged: (value) {
+                            setState(() {
+                              _aceitoTermos = value!;
+                            });
+                          },
+                        ),
+                        const Text('Aceito os '),
+                        InkWell(
+                          onTap: () {}, // Adicione a ação aqui
+                          child: const Text(
+                            'Termos de Uso',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Já tem conta?'),
+                        InkWell(
+                          onTap: () {
+                            // Ação ao clicar em "Fazer Login"
+                          },
+                          child: const Text(
+                            ' Fazer Login',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Button(
+                      // Substitua pelo seu componente Button
+                      viewModel: ButtonViewModel(
+                        buttonText: 'Continuar',
+                        fillColor: Colors.deepPurple,
+                        onPressed: () {
+                          // Ação ao clicar em "Continuar"
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                'Cadastrar',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
