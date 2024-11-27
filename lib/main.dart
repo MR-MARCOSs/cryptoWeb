@@ -33,6 +33,10 @@ class CadastrarTela extends StatefulWidget {
 class _CadastrarTelaState extends State<CadastrarTela> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
+
+  bool _aceitoTermos = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +55,12 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                   children: <Widget>[
                     const SizedBox(
                         height: 3), // Espaçamento para o título externo
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.grey,
+                    // Substituindo o CircleAvatar por Image.asset
+                    Image.asset(
+                      'assets/main_icon.png',
+                      width:
+                          160, // Defina o tamanho da imagem conforme necessário
+                      height: 160,
                     ),
                     const SizedBox(height: 20),
                     InputField(
@@ -75,13 +82,50 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    InputField(
+                      // Substitua pelo seu componente InputField
+                      viewModel: InputFieldViewModel(
+                        controller: _confirmarSenhaController,
+                        hintText: 'Confirmar senha',
+                        obscureText: true,
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Text('Não tem uma conta? '),
+                        Checkbox(
+                          value: _aceitoTermos,
+                          onChanged: (value) {
+                            setState(() {
+                              _aceitoTermos = value!;
+                            });
+                          },
+                        ),
+                        const Text('Aceito os '),
                         InkWell(
                           onTap: () {}, // Adicione a ação aqui
                           child: const Text(
-                            'Fazer cadastro',
+                            'Termos de Uso',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Já tem conta?'),
+                        InkWell(
+                          onTap: () {
+                            // Ação ao clicar em "Fazer Login"
+                          },
+                          child: const Text(
+                            ' Fazer Login',
                             style: TextStyle(
                               color: Colors.blue,
                               decoration: TextDecoration.underline,
@@ -109,7 +153,7 @@ class _CadastrarTelaState extends State<CadastrarTela> {
             const Padding(
               padding: EdgeInsets.only(bottom: 10),
               child: Text(
-                'Entrar',
+                'Cadastrar',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

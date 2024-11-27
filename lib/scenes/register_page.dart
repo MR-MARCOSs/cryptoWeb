@@ -56,9 +56,12 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                   children: <Widget>[
                     const SizedBox(
                         height: 3), // Espaçamento para o título externo
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.grey,
+                    // Substituindo o CircleAvatar por Image.asset
+                    Image.asset(
+                      'assets/main_icon.png',
+                      width:
+                          160, // Defina o tamanho da imagem conforme necessário
+                      height: 160,
                     ),
                     const SizedBox(height: 20),
                     InputField(
@@ -165,4 +168,5 @@ class _CadastrarTelaState extends State<CadastrarTela> {
     );
   }
 }
+
 */
