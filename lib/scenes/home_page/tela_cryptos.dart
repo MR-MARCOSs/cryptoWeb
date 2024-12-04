@@ -10,6 +10,7 @@ import '../../components/top_bar/top_bar_view_model.dart';
 import '../../components/input_field/input_field.dart';
 import '../../components/input_field/input_field_view_model.dart';
 import '../../components/favorites/favorites_view_model.dart';
+import 'dart:math';
 
 void main() {
   runApp(
@@ -106,16 +107,21 @@ class _CoinBarListState extends State<CoinBarList> {
   Future<void> _loadCryptoPrices() async {
     try {
       final cryptoData = await _cryptoService.fetchCryptoPrices();
+      final random = Random(); // Cria uma instância do Random
+
       setState(() {
         _coinBars = cryptoData.map((coin) {
+          // Gera um número aleatório 0 ou 1
+          final randomIcon = random.nextInt(2);
+
           return CoinBarViewModel(
             coinImage: Image.network(coin['image']),
             value: 'R\$ ${coin['current_price']}',
             coinSymbol: coin['symbol'].toUpperCase(),
             icon1: Icons.favorite_sharp,
-            icon2: Icons.arrow_downward,
-            icon1Color: Color(0xFF878787),
-            icon2Color: Colors.red,
+            // Define o ícone e a cor com base no número aleatório
+            icon2: randomIcon == 0 ? Icons.arrow_downward : Icons.arrow_upward,
+            icon2Color: randomIcon == 0 ? Colors.red : Colors.green,
             fillColor: Color(0xFFE9E9E9),
             borderColor: Color(0xFF7F24CE),
             borderWidth: 2.0,
