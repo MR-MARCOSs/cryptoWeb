@@ -1,9 +1,13 @@
-/*
+import 'package:cryptos/main.dart';
 import 'package:flutter/material.dart';
-import 'components/button/button.dart';
-import 'components/button/button_view_model.dart';
-import 'components/input_field/input_field.dart';
-import 'components/input_field/input_field_view_model.dart';
+import '../../components/button/button.dart';
+import '../../components/button/button_view_model.dart';
+import '../../components/input_field/input_field.dart';
+import '../../components/input_field/input_field_view_model.dart';
+import 'package:provider/provider.dart'; // Import necessário
+import '../home_page/tela_cryptos.dart';
+import '../../components/favorites/favorites_view_model.dart';
+import '../../components/bottom_bar/bottom_bar_view_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,19 +23,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: const CadastrarTela(),
+      home: const LoginTela(),
     );
   }
 }
 
-class CadastrarTela extends StatefulWidget {
-  const CadastrarTela({super.key});
+class LoginTela extends StatefulWidget {
+  const LoginTela({super.key});
 
   @override
-  State<CadastrarTela> createState() => _CadastrarTelaState();
+  State<LoginTela> createState() => _LoginTelaState();
 }
 
-class _CadastrarTelaState extends State<CadastrarTela> {
+class _LoginTelaState extends State<LoginTela> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
@@ -83,7 +87,13 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                       children: [
                         const Text('Não tem uma conta? '),
                         InkWell(
-                          onTap: () {}, // Adicione a ação aqui
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CadastrarTela()),
+                            );
+                          }, // Adicione a ação aqui
                           child: const Text(
                             'Fazer cadastro',
                             style: TextStyle(
@@ -96,12 +106,25 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                     ),
                     const SizedBox(height: 20),
                     Button(
-                      // Substitua pelo seu componente Button
                       viewModel: ButtonViewModel(
                         buttonText: 'Continuar',
                         fillColor: Colors.deepPurple,
                         onPressed: () {
-                          // Ação ao clicar em "Continuar"
+                          // Navegação para a tela principal (MyHomePage)
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MultiProvider(
+                                providers: [
+                                  ChangeNotifierProvider(
+                                      create: (_) => BottomBarViewModel()),
+                                  ChangeNotifierProvider(
+                                      create: (_) => FavoritesViewModel()),
+                                ],
+                                child: MyHomePage(),
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -126,5 +149,3 @@ class _CadastrarTelaState extends State<CadastrarTela> {
     );
   }
 }
-
-*/

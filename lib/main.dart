@@ -4,9 +4,11 @@ import 'components/button/button_view_model.dart';
 import 'components/input_field/input_field.dart';
 import 'components/input_field/input_field_view_model.dart';
 import 'package:provider/provider.dart'; // Importado
-import 'tela_cryptos.dart'; // Importado
+import 'scenes/home_page/tela_cryptos.dart'; // Importado
 import 'components/favorites/favorites_view_model.dart';
 import 'components/bottom_bar/bottom_bar_view_model.dart';
+import 'scenes/login/login_tela.dart';
+
 void main() {
   runApp(const MyApp()); // Agora o app inicia aqui
 }
@@ -36,7 +38,8 @@ class CadastrarTela extends StatefulWidget {
 class _CadastrarTelaState extends State<CadastrarTela> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
 
   bool _aceitoTermos = false;
 
@@ -71,7 +74,7 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                     ),
                     const SizedBox(height: 10),
                     InputField(
-                       viewModel: InputFieldViewModel(
+                      viewModel: InputFieldViewModel(
                         controller: _senhaController,
                         hintText: 'Senha',
                         obscureText: true,
@@ -105,34 +108,38 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                             'Termos de Uso',
                             style: TextStyle(
                               color: Colors.blue,
-                             decoration: TextDecoration.underline,
+                              decoration: TextDecoration.underline,
                             ),
-                           ),
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 5),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Já tem conta?'),
+                        const Text('Já tem uma conta? '),
                         InkWell(
                           onTap: () {
-
+                            // Navega para a tela de Cadastro:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginTela()),
+                            );
                           },
                           child: const Text(
-                           ' Fazer Login',
-                           style: TextStyle(
+                            ' Fazer Login',
+                            style: TextStyle(
                               color: Colors.blue,
-                             decoration: TextDecoration.underline,
+                              decoration: TextDecoration.underline,
                             ),
-                           ),
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
-
-                    Button( // Alterado
+                    Button(
+                      // Alterado
                       viewModel: ButtonViewModel(
                         buttonText: 'Continuar',
                         fillColor: Colors.deepPurple,
@@ -142,8 +149,10 @@ class _CadastrarTelaState extends State<CadastrarTela> {
                             MaterialPageRoute(
                               builder: (context) => MultiProvider(
                                 providers: [
-                                  ChangeNotifierProvider(create: (_) => BottomBarViewModel()),
-                                  ChangeNotifierProvider(create: (_) => FavoritesViewModel()),
+                                  ChangeNotifierProvider(
+                                      create: (_) => BottomBarViewModel()),
+                                  ChangeNotifierProvider(
+                                      create: (_) => FavoritesViewModel()),
                                 ],
                                 child: MyHomePage(),
                               ),
