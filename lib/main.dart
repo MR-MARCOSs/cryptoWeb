@@ -1,276 +1,172 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'components/bottom_bar/bottom_bar.dart';
-import 'components/bottom_bar/bottom_bar_view_model.dart';
-import 'components/coin_bar/coin_bar.dart';
-import 'components/coin_bar/coin_bar_view_model.dart';
-import 'crypto_service.dart';
-import 'components/top_bar/top_bar.dart';
-import 'components/top_bar/top_bar_view_model.dart';
+import 'components/button/button.dart';
+import 'components/button/button_view_model.dart';
 import 'components/input_field/input_field.dart';
 import 'components/input_field/input_field_view_model.dart';
-import 'components/favorites/favorites_view_model.dart'; // Importando o InputField
-
-// Função principal que inicia a aplicação Flutter
+import 'package:provider/provider.dart'; // Importado
+import 'tela_cryptos.dart'; // Importado
+import 'components/favorites/favorites_view_model.dart';
+import 'components/bottom_bar/bottom_bar_view_model.dart';
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => BottomBarViewModel()),
-        ChangeNotifierProvider(create: (_) => FavoritesViewModel()), // Adicionado
-      ],
-      child: MyApp(),
-    ),
-  );
+  runApp(const MyApp()); // Agora o app inicia aqui
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => BottomBarViewModel(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(),
+    return MaterialApp(
+      title: 'Cadastrar Tela',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
       ),
+      home: const CadastrarTela(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<BottomBarViewModel>(
-        builder: (context, viewModel, child) {
-          // Navegar pelas páginas conforme o índice selecionado
-          final currentPage = [
-            CoinBarList(),  // Página de criptomoedas
-            ProfilePage(),  // Página de perfil
-          ][viewModel.currentIndex];
+class CadastrarTela extends StatefulWidget {
+  const CadastrarTela({super.key});
 
-          return currentPage;
-        },
-      ),
-      bottomNavigationBar: Consumer<BottomBarViewModel>(
-        builder: (context, viewModel, child) {
-          return BottomBar(
-            currentIndex: viewModel.currentIndex,
-            onTabChange: (index) {
-              viewModel.setIndex(index); // Atualiza o índice da aba
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.currency_bitcoin), // Ícone de criptomoeda
-                label: 'Crypto',
-                backgroundColor: viewModel.currentIndex == 0
-                    ? Colors.purple
-                    : Colors.grey,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-                backgroundColor: viewModel.currentIndex == 1
-                    ? Colors.purple
-                    : Colors.grey,
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  @override
+  State<CadastrarTela> createState() => _CadastrarTelaState();
 }
 
-// Página de Criptomoedas
-class CoinBarList extends StatefulWidget {
-  @override
-  _CoinBarListState createState() => _CoinBarListState();
-}
+class _CadastrarTelaState extends State<CadastrarTela> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController = TextEditingController();
 
-class _CoinBarListState extends State<CoinBarList> {
-  final CryptoService _cryptoService = CryptoService();
-  List<CoinBarViewModel> _coinBars = [];
-  List<CoinBarViewModel> _filteredCoinBars = [];
-  bool _isLoading = true;
-  TextEditingController _searchController = TextEditingController(); // Controlador para o campo de pesquisa
-  String _searchQuery = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadCryptoPrices();
-    _searchController.addListener(_onSearchChanged); // Ouvir mudanças no texto do campo de pesquisa
-  }
-
-  // Função que carrega os preços das criptomoedas
-  Future<void> _loadCryptoPrices() async {
-    try {
-      final cryptoData = await _cryptoService.fetchCryptoPrices();
-      setState(() {
-        _coinBars = cryptoData.map((coin) {
-          return CoinBarViewModel(
-            coinImage: Image.network(coin['image']),
-            value: 'R\$ ${coin['current_price']}',
-            coinSymbol: coin['symbol'].toUpperCase(),  // Adicionando o símbolo da moeda
-            icon1: Icons.favorite_sharp,
-            icon2: Icons.arrow_downward,
-            icon1Color: Color(0xFF878787),
-            icon2Color: Colors.red,
-            fillColor: Color(0xFFE9E9E9),
-            borderColor: Color(0xFF7F24CE),
-            borderWidth: 2.0,
-          );
-        }).toList();
-        _filteredCoinBars = List.from(_coinBars);  // Inicializando a lista de moedas filtradas
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      print('Erro ao carregar dados: $e');
-    }
-  }
-
-  // Função chamada sempre que o texto da pesquisa é alterado
-  void _onSearchChanged() {
-    setState(() {
-      _searchQuery = _searchController.text.toLowerCase();
-      _filteredCoinBars = _coinBars.where((coin) {
-        final coinName = coin.coinSymbol.toLowerCase();
-        return coinName.contains(_searchQuery);
-      }).toList();
-    });
-  }
+  bool _aceitoTermos = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80), // Ajuste a altura da top bar
-        child: TopBar(
-          viewModel: TopBarViewModel(
-            backgroundColor: Color(0xFF7F24CE),
-            leftImage: 'assets/main_icon.png',
-            rightIcon: Icons.settings,
-            iconColor: Colors.white, // Ícones brancos
-            onRightIconPressed: () {
-              print("Configurações pressionadas!");
-            },
-            inputField: InputField(
-              viewModel: InputFieldViewModel(
-                controller: _searchController, // Usando o controlador de texto aqui
-                hintText: 'Search',
-                fillColor: Color(0xFFAE53FE),
-                borderColor: Colors.white,
-                hasBorder: true,
-                icon: Icons.search,
-                onChanged: (text) {
-                  _onSearchChanged(); // Chamando a função de filtro
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _filteredCoinBars.map((viewModel) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 30), // Espaço extra à esquerda
-                        child: CoinBar(viewModel: viewModel),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-    );
-  }
-}
-
-// Página de Perfil
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final favorites = Provider.of<FavoritesViewModel>(context).favorites;
-
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: TopBar(
-          viewModel: TopBarViewModel(
-            leftImage: 'assets/main_icon.png',
-            backgroundColor: Color(0xFF7F24CE),
-            title: "Profile",
-            rightIcon: Icons.settings,
-            iconColor: Colors.white, // Ícones brancos
-            onRightIconPressed: () {
-              print("Configurações pressionadas!");
-            },
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.deepPurple,
+      body: Center(
+        child: Stack(
+          alignment: Alignment.topCenter,
           children: [
-            // Foto e informações do usuário
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage('https://www.example.com/your-profile-image.jpg'),
-                ),
-                SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'João da Silva',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+            Card(
+              margin: const EdgeInsets.only(top: 25.3, left: 20, right: 20),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(height: 3),
+                    Image.asset(
+                      'assets/main_icon.png',
+                      width: 160,
+                      height: 160,
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      'joao.silva@example.com',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    const SizedBox(height: 20),
+                    InputField(
+                      viewModel: InputFieldViewModel(
+                        controller: _emailController,
+                        hintText: 'Email ou telefone',
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                       viewModel: InputFieldViewModel(
+                        controller: _senhaController,
+                        hintText: 'Senha',
+                        obscureText: true,
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                      viewModel: InputFieldViewModel(
+                        controller: _confirmarSenhaController,
+                        hintText: 'Confirmar senha',
+                        obscureText: true,
+                        fillColor: Colors.grey[200]!,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _aceitoTermos,
+                          onChanged: (value) {
+                            setState(() {
+                              _aceitoTermos = value!;
+                            });
+                          },
+                        ),
+                        const Text('Aceito os '),
+                        InkWell(
+                          onTap: () {},
+                          child: const Text(
+                            'Termos de Uso',
+                            style: TextStyle(
+                              color: Colors.blue,
+                             decoration: TextDecoration.underline,
+                            ),
+                           ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Já tem conta?'),
+                        InkWell(
+                          onTap: () {
+
+                          },
+                          child: const Text(
+                           ' Fazer Login',
+                           style: TextStyle(
+                              color: Colors.blue,
+                             decoration: TextDecoration.underline,
+                            ),
+                           ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Button( // Alterado
+                      viewModel: ButtonViewModel(
+                        buttonText: 'Continuar',
+                        fillColor: Colors.deepPurple,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MultiProvider(
+                                providers: [
+                                  ChangeNotifierProvider(create: (_) => BottomBarViewModel()),
+                                  ChangeNotifierProvider(create: (_) => FavoritesViewModel()),
+                                ],
+                                child: MyHomePage(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 32),
-            // Lista de Favoritas
-            Text(
-              'Favoritas',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                'Cadastrar',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
-            SizedBox(height: 16),
-            favorites.isEmpty
-                ? Text('Nenhuma moeda favoritada.', style: TextStyle(color: Colors.grey))
-                : Column(
-                    children: favorites.map((coin) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 30), // Espaçamento à esquerda
-                          child: CoinBar(viewModel: coin),
-                        ),
-                      );
-                    }).toList(),
-                  ),
           ],
         ),
       ),
