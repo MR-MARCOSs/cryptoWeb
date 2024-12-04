@@ -96,12 +96,14 @@ class _CoinBarListState extends State<CoinBarList> {
   List<CoinBarViewModel> _coinBars = [];
   List<CoinBarViewModel> _filteredCoinBars = [];
   bool _isLoading = true;
+  TextEditingController _searchController = TextEditingController(); // Controlador para o campo de pesquisa
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _loadCryptoPrices();
+    _searchController.addListener(_onSearchChanged); // Ouvir mudanças no texto do campo de pesquisa
   }
 
   // Função que carrega os preços das criptomoedas
@@ -134,10 +136,10 @@ class _CoinBarListState extends State<CoinBarList> {
     }
   }
 
-  // Função que filtra as moedas com base no texto de busca
-  void _updateFilteredCoins(String query) {
+  // Função chamada sempre que o texto da pesquisa é alterado
+  void _onSearchChanged() {
     setState(() {
-      _searchQuery = query.toLowerCase();
+      _searchQuery = _searchController.text.toLowerCase();
       _filteredCoinBars = _coinBars.where((coin) {
         final coinName = coin.coinSymbol.toLowerCase();
         return coinName.contains(_searchQuery);
@@ -161,14 +163,14 @@ class _CoinBarListState extends State<CoinBarList> {
             },
             inputField: InputField(
               viewModel: InputFieldViewModel(
-                controller: TextEditingController(),
+                controller: _searchController, // Usando o controlador de texto aqui
                 hintText: 'Search',
                 fillColor: Color(0xFFAE53FE),
                 borderColor: Colors.white,
                 hasBorder: true,
                 icon: Icons.search,
                 onChanged: (text) {
-                  _updateFilteredCoins(text); // Atualiza o filtro com a pesquisa
+                  _onSearchChanged(); // Chamando a função de filtro
                 },
               ),
             ),
