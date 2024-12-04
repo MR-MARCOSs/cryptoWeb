@@ -29,7 +29,20 @@ class CoinBar extends StatelessWidget {
           ),
           child: Row(
             children: [
-              SizedBox(width: coinDiameter / 2),
+              // Espaço para a imagem da moeda e o símbolo
+              SizedBox(width: coinDiameter), // Garantindo que a imagem ocupe o espaço necessário
+
+              // Anagrama (símbolo da moeda) ao lado da imagem
+              Text(
+                viewModel.coinSymbol, // Exibe o símbolo da moeda
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+
+              // Valor da moeda
               Expanded(
                 child: Text(
                   viewModel.value,
@@ -48,10 +61,10 @@ class CoinBar extends StatelessWidget {
           ),
         ),
 
-        // Imagem da moeda
+        // Imagem da moeda (alinhada à esquerda, com metade fora e metade dentro do retângulo)
         Positioned(
-          left: -coinDiameter / 2,
-          top: (barHeight - coinDiameter) / 2,
+          left: -coinDiameter / 2, // Colocando a imagem com metade fora
+          top: (barHeight - coinDiameter) / 2, // Centralizando a imagem verticalmente
           child: ClipOval(
             child: SizedBox(
               width: coinDiameter,
