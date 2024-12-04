@@ -12,31 +12,34 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: viewModel.backgroundColor,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajuste o padding conforme necessário
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           if (viewModel.leftImage != null)
             Padding(
-              padding: const EdgeInsets.only(right: 8.0), // Espaçamento entre a imagem e o título/input
+              padding: const EdgeInsets.only(right: 8.0),
               child: Image.asset(
                 viewModel.leftImage!,
-                height: 24, // Ajuste a altura conforme necessário
-                width: 24,   // Ajuste a largura conforme necessário
+                height: 24,
+                width: 24,
               ),
             ),
           Expanded(
             child: viewModel.title != null
                 ? Text(
                     viewModel.title!,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // Estilo do título
-                    textAlign: TextAlign.center, // Centralizar o título
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   )
-                : viewModel.inputField ?? const SizedBox.shrink(), // Seu componente input_field
+                : viewModel.inputField ?? const SizedBox.shrink(),
           ),
           if (viewModel.rightIcon != null)
             IconButton(
               onPressed: viewModel.onRightIconPressed,
-              icon: Icon(viewModel.rightIcon),
+              icon: Icon(
+                viewModel.rightIcon,
+                color: viewModel.iconColor, // Aplicação da cor do ícone
+              ),
             ),
         ],
       ),

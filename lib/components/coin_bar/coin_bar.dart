@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'coin_bar_view_model.dart';
-
-class CoinBar extends StatelessWidget {
+import 'package:provider/provider.dart';
+import '../favorites/favorites_view_model.dart';
+class CoinBar extends StatefulWidget {
   final CoinBarViewModel viewModel;
 
   const CoinBar({Key? key, required this.viewModel}) : super(key: key);
+
+  @override
+  _CoinBarState createState() => _CoinBarState();
+}
+
+class _CoinBarState extends State<CoinBar> {
+  bool _isFavorite = false;  // Controla se o ícone foi clicado (favorito)
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +27,13 @@ class CoinBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           height: barHeight,
           decoration: BoxDecoration(
-            color: viewModel.fillColor ?? Colors.grey[200],
-            border:
-                viewModel.borderColor != null && viewModel.borderWidth != null
-                    ? Border.all(
-                        color: viewModel.borderColor!,
-                        width: viewModel.borderWidth!)
-                    : null,
+            color: widget.viewModel.fillColor ?? Colors.grey[200],
+            border: widget.viewModel.borderColor != null && widget.viewModel.borderWidth != null
+                ? Border.all(
+                    color: widget.viewModel.borderColor!,
+                    width: widget.viewModel.borderWidth!,
+                  )
+                : null,
           ),
           child: Row(
             children: [
@@ -34,7 +42,7 @@ class CoinBar extends StatelessWidget {
 
               // Anagrama (símbolo da moeda) ao lado da imagem
               Text(
-                viewModel.coinSymbol, // Exibe o símbolo da moeda
+                widget.viewModel.coinSymbol, // Exibe o símbolo da moeda
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -45,7 +53,7 @@ class CoinBar extends StatelessWidget {
               // Valor da moeda
               Expanded(
                 child: Text(
-                  viewModel.value,
+                  widget.viewModel.value,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -53,10 +61,26 @@ class CoinBar extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(viewModel.icon1, color: viewModel.icon1Color ?? Colors.grey),
+GestureDetector(
+  onTap: () {
+    final favoritesViewModel = Provider.of<FavoritesViewModel>(context, listen: false);
+    favoritesViewModel.toggleFavorite(widget.viewModel);
+  },
+  child: Icon(
+    widget.viewModel.icon1,
+    color: Provider.of<FavoritesViewModel>(context)
+            .favorites
+            .any((favorite) => favorite.coinSymbol == widget.viewModel.coinSymbol)
+        ? Colors.purple
+        : (widget.viewModel.icon1Color ?? Colors.grey),
+  ),
+),
+
               const SizedBox(width: 8),
-              Icon(viewModel.icon2,
-                  color: viewModel.icon2Color ?? Colors.green),
+              Icon(
+                widget.viewModel.icon2,
+                color: widget.viewModel.icon2Color ?? Colors.green,
+              ),
             ],
           ),
         ),
@@ -69,7 +93,7 @@ class CoinBar extends StatelessWidget {
             child: SizedBox(
               width: coinDiameter,
               height: coinDiameter,
-              child: viewModel.coinImage,
+              child: widget.viewModel.coinImage,
             ),
           ),
         ),

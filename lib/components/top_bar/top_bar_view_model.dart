@@ -7,8 +7,9 @@ class TopBarViewModel {
   final String? leftImage;
   final String? title;
   final IconData? rightIcon;
-  final VoidCallback? onRightIconPressed;
-    final InputField? inputField; // Adiciona o inputField
+  final void Function()? onRightIconPressed;
+  final Widget? inputField;
+  final Color iconColor; // Cor dos ícones adicionada
 
   TopBarViewModel({
     required this.backgroundColor,
@@ -16,7 +17,7 @@ class TopBarViewModel {
     this.title,
     this.rightIcon,
     this.onRightIconPressed,
-        this.inputField, // Não precisa de valor padrão
-  }) : assert(title != null || inputField != null, "Forneça um título ou um inputField."); // Garante que pelo menos um dos dois seja fornecido
-
+    this.inputField,
+    this.iconColor = Colors.white, // Cor padrão branca
+  });
 }

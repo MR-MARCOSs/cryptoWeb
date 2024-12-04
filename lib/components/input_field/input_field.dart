@@ -13,27 +13,23 @@ class InputField extends StatelessWidget {
       obscureText: viewModel.obscureText,  // Para senhas
       decoration: InputDecoration(
         filled: true,
-        fillColor: viewModel.fillColor,
+        fillColor: viewModel.fillColor,  // Cor de preenchimento
         border: viewModel.hasBorder
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0), // Cantos arredondados
                 borderSide: BorderSide(color: viewModel.borderColor),
               )
             : OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide.none, // Sem borda
             ),
-          
         prefixIcon: viewModel.icon != null
             ? Icon(viewModel.icon)
-            : null,
-        hintText: viewModel.hintText,
-         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0)
+            : null,  // Ícone de pesquisa
+        hintText: viewModel.hintText,  // Texto de dica
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0)
       ),
-
-       onChanged: viewModel.onChanged,
-
-
+      onChanged: viewModel.onChanged,
     );
   }
 }

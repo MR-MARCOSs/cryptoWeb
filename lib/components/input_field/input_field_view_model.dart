@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 
-
 class InputFieldViewModel {
   final TextEditingController controller;
-  final String hintText;
+  final String? hintText;
+  final bool obscureText;
   final Color fillColor;
+  final Color borderColor;
   final bool hasBorder;
-  final Color borderColor; // Cor da borda, se houver
-  final IconData? icon; // Ícone, se houver
-  final bool obscureText; // Para campos de senha
-   final ValueChanged<String>? onChanged;
+  final IconData? icon;
+  final Function(String)? onChanged;
 
   InputFieldViewModel({
     required this.controller,
-    required this.hintText,
-    required this.fillColor,
-    this.hasBorder = true,
-    this.borderColor = Colors.grey, // Cor padrão da borda
-    this.icon,
+    this.hintText,
     this.obscureText = false,
+    this.fillColor = Colors.transparent,
+    this.borderColor = Colors.transparent,
+    this.hasBorder = true,
+    this.icon,
     this.onChanged,
   });
 }
